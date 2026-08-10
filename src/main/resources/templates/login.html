@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+
+    <style>
+        :root {
+            --bg-1: #081121;
+            --bg-2: #111827;
+            --panel: rgba(15, 23, 42, 0.78);
+            --line: rgba(148, 163, 184, 0.22);
+            --text: #e5e7eb;
+            --muted: #cbd5e1;
+            --primary: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            color: var(--text);
+            padding: 24px;
+        }
+
+        .login-box {
+            width: min(100%, 420px);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 32px 28px;
+            box-shadow: 0 22px 45px rgba(8, 17, 33, 0.7);
+            backdrop-filter: blur(12px);
+        }
+
+        h2 {
+            margin: 0 0 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .error {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(248, 113, 113, 0.15);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #fecaca;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 10px rgba(139, 92, 246, .3);
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: .95;
+        }
+
+        .meta {
+            margin-top: 18px;
+            text-align: center;
+            color: var(--muted);
+            font-size: .95rem;
+        }
+
+        a {
+            color: #c4b5fd;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width:480px) {
+            .login-box {
+                padding: 25px 20px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h2>Admin Login</h2>
+
+    <div class="error"
+         th:if="${error != null}"
+         th:text="${error}">
+    </div>
+
+    <form th:action="@{/login}" method="post">
+
+        <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                required>
+
+        <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <p class="meta">
+        Demo Credentials:
+        <strong>admin</strong> /
+        <strong>admin123</strong>
+    </p>
+
+    <p class="meta">
+        <a th:href="@{/register}">
+            Create New Account
+        </a>
+    </p>
+
+</div>
+
+</body>
+
+</html>

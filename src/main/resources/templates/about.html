@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+
+    <style>
+        :root {
+            --bg: #07111f;
+            --panel: rgba(15, 23, 42, 0.8);
+            --line: rgba(148, 163, 184, 0.22);
+            --text: #e2e8f0;
+            --muted: #cbd5e1;
+            --primary: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top, #172554, #020817 55%);
+            color: var(--text);
+            padding: 40px 20px;
+        }
+
+        .box {
+            width: min(100%, 760px);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(2, 8, 23, 0.6);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.4rem;
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>About This Project</h1>
+
+    <p>
+        This is a Student Management System developed using
+        <strong>Java, Spring Boot, Spring MVC, Thymeleaf, Spring Data JPA,</strong>
+        and the <strong>H2 Database</strong>.
+    </p>
+
+    <p>
+        The application enables users to add, view, edit, delete, and search
+        student records. It also displays dashboard statistics such as the
+        total number of students and the average marks.
+    </p>
+
+    <a th:href="@{/}" class="btn">Back to Home</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EduBoard - Dashboard</title>
+
+    <!-- =========================
+         STYLES
+         ========================= -->
+
+    <style>
+
+        :root {
+            --bg: #060d1a;
+            --panel: rgba(15, 23, 42, 0.94);
+            --panel-light: rgba(255, 255, 255, 0.03);
+            --line: rgba(148, 163, 184, 0.2);
+
+            --text: #e2e8f0;
+            --muted: #cbd5e1;
+
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+
+            --success: #22c55e;
+            --warning: #fbbf24;
+            --info: #38bdf8;
+        }
+
+        /* =========================
+           RESET
+           ========================= */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* =========================
+           BODY
+           ========================= */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family:
+                "Segoe UI",
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #020817,
+                    #111827 50%,
+                    #0f172a 100%
+                );
+            color: var(--text);
+            padding: 30px 18px;
+        }
+
+        /* =========================
+           APP SHELL
+           ========================= */
+        .app-shell {
+            width: min(100%, 1280px);
+            margin: auto;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+        }
+
+        /* =========================
+           SIDEBAR
+           ========================= */
+        .sidebar {
+            background:
+                rgba(15, 23, 42, 0.95);
+            border:
+                1px solid var(--line);
+            border-radius: 24px;
+            padding: 22px 18px;
+            min-height: 760px;
+        }
+
+        .brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav a {
+            display: block;
+            padding: 13px 15px;
+            text-decoration: none;
+            color: var(--muted);
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background:
+                rgba(139, 92, 246, 0.18);
+            color: white;
+        }
+
+        /* =========================
+           MAIN CONTENT
+           ========================= */
+        .content {
+            background: var(--panel);
+            border:
+                1px solid var(--line);
+            border-radius: 24px;
+            padding: 28px;
+            overflow: hidden;
+        }
+
+        /* =========================
+           TOP BAR
+           ========================= */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 2.3rem;
+            color: white;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        /* =========================
+           BUTTONS
+           ========================= */
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 10px;
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+            color: white;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background:
+                rgba(45, 212, 191, 0.12);
+            border:
+                1px solid rgba(45, 212, 191, 0.35);
+            color: white;
+        }
+        /* =========================
+           STATISTICS
+           ========================= */
+        .cards {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background:
+                var(--panel-light);
+            border:
+                1px solid var(--line);
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+
+        .stat-card {
+            min-height: 145px;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background:
+                rgba(255, 255, 255, 0.05);
+        }
+
+        .card.accent {
+            border-color: var(--info);
+        }
+
+        .card.success {
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            border-color: var(--warning);
+        }
+
+        .card.info {
+            border-color: var(--info);
+        }
+
+        .card h3 {
+            color: var(--muted);
+            margin:
+                0 0 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card h2 {
+            margin: 0;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .stat-description {
+            margin-top: 8px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        /* =========================
+           TOP COURSE
+           ========================= */
+        .top-course {
+            margin-bottom: 20px;
+        }
+
+        .top-course h2 {
+            color: #c4b5fd;
+        }
+
+        /* =========================
+           CHART CARDS
+           ========================= */
+        .chart-card {
+            margin-bottom: 20px;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 18px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* =========================
+           TABLE
+           ========================= */
+        .table-card {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th,
+        td {
+            padding: 14px;
+            border-bottom:
+                1px solid var(--line);
+            text-align: left;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        td {
+            color: var(--text);
+        }
+        tbody tr:hover {
+            background:
+                rgba(255, 255, 255, 0.04);
+        }
+        /* =========================
+           NO STUDENTS
+           ========================= */
+        .no-students {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+        @media (max-width: 1000px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                min-height: auto;
+            }
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .actions {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <!-- =================================================
+         SIDEBAR
+         ================================================= -->
+    <aside class="sidebar">
+        <div class="brand">
+            EduBoard
+        </div>
+
+        <nav class="nav">
+            <a class="active"
+               th:href="@{/dashboard}">
+                Dashboard
+            </a>
+
+            <a th:href="@{/students}">
+                Students
+            </a>
+
+            <a th:href="@{/students/new}">
+                Add Student
+            </a>
+
+            <a th:href="@{/about}">
+                About
+            </a>
+
+            <a th:href="@{/login}">
+                Logout
+            </a>
+
+        </nav>
+    </aside>
+
+    <!-- =================================================
+         MAIN CONTENT
+         ================================================= -->
+    <main class="content">
+        <!-- =================================================
+             TOP BAR
+             ================================================= -->
+        <div class="topbar">
+            <h1>
+                Dashboard
+            </h1>
+
+            <div class="actions">
+                <a class="btn"
+                   th:href="@{/students}">
+                    Manage Students
+                </a>
+
+                <a class="btn secondary"
+                   th:href="@{/}">
+                    Home
+                </a>
+            </div>
+        </div>
+
+        <!-- =================================================
+             STATISTICS
+             ================================================= -->
+        <div class="cards">
+
+            <!-- TOTAL STUDENTS -->
+            <div class="card stat-card accent">
+                <h3>
+                    Total Students
+                </h3>
+
+                <h2
+                    th:text="${totalStudents != null ? totalStudents : 0}">
+                    0
+                </h2>
+
+                <div class="stat-description">
+                    Students registered
+                </div>
+
+            </div>
+
+            <!-- AVERAGE MARKS -->
+            <div class="card stat-card success">
+                <h3>
+                    Average Marks
+                </h3>
+
+                <h2
+                    th:text="${averageMarks != null
+                        ? #numbers.formatDecimal(averageMarks, 1, 2)
+                        : '0.00'}">
+                    0.00
+                </h2>
+
+                <div class="stat-description">
+                    Overall average
+                </div>
+            </div>
+
+            <!-- PASS RATE -->
+            <div class="card stat-card info">
+                <h3>
+                    Pass Rate
+                </h3>
+
+                <h2
+                    th:text="${passRate != null
+                        ? #numbers.formatDecimal(passRate, 1, 2) + '%'
+                        : '0.00%'}">
+                    0.00%
+                </h2>
+
+                <div class="stat-description">
+                    Students scoring 40+
+                </div>
+            </div>
+
+            <!-- TOP PERFORMER -->
+            <div class="card stat-card warning">
+                <h3>
+                    Top Performer
+                </h3>
+
+                <h2
+                    th:text="${topPerformer != null
+                        ? topPerformer.name
+                        : 'N/A'}">
+                    N/A
+                </h2>
+
+                <div
+                    class="stat-description"
+                    th:if="${topPerformer != null}"
+                    th:text="'Marks: ' + topPerformer.marks">
+                    Marks: 0
+                </div>
+
+                <div
+                    class="stat-description"
+                    th:if="${topPerformer == null}">
+
+                    No student data
+
+                </div>
+            </div>
+        </div>
+
+        <!-- =================================================
+             MOST POPULAR COURSE
+             ================================================= -->
+        <div class="card top-course">
+            <h3>
+                Most Popular Course
+            </h3>
+
+            <h2
+                th:text="${topCourse != null
+                    ? topCourse
+                    : 'N/A'}">
+                N/A
+            </h2>
+
+            <div class="stat-description">
+                Course with the highest number of students
+            </div>
+        </div>
+        <!-- =================================================
+             STUDENT PERFORMANCE CHART
+             ================================================= -->
+        <div class="card chart-card">
+
+            <h3>
+                Student Performance
+            </h3>
+
+            <div class="chart-container">
+                <canvas id="marksChart"></canvas>
+            </div>
+        </div>
+        <!-- =================================================
+             STUDENTS BY COURSE CHART
+             ================================================= -->
+        <div class="card chart-card">
+
+            <h3>
+                Students by Course
+            </h3>
+
+            <div class="chart-container">
+                <canvas id="courseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- =================================================
+             STUDENT TABLE
+             ================================================= -->
+
+        <div class="card table-card">
+            <h3>
+                Students
+            </h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Course
+                    </th>
+                    <th>
+                        Marks
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- STUDENTS -->
+                <tr
+                    th:each="student : ${students}">
+
+                    <td
+                        th:text="${student.id}">
+                        1
+                    </td>
+                    <td
+                        th:text="${student.name}">
+                        Student
+                    </td>
+                    <td
+                        th:text="${student.course}">
+                        Java
+                    </td>
+                    <td
+                        th:text="${student.marks}">
+                        90
+                    </td>
+                </tr>
+                <!-- NO STUDENTS -->
+                <tr
+                    th:if="${students == null or students.isEmpty()}">
+                    <td
+                        colspan="4"
+                        class="no-students">
+                        No students found.
+                    </td>
+
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </main>
+
+</div>
+<!-- =====================================================
+     CHART.JS
+     ===================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- =====================================================
+     CHART JAVASCRIPT
+     ===================================================== -->
+
+<script th:inline="javascript">
+
+    /* =====================================================
+       DATA FROM SPRING BOOT / THYMELEAF
+       ===================================================== */
+
+    const students =
+        /*[[${students}]]*/ [];
+    const courseCounts =
+        /*[[${courseCounts}]]*/ {};
+    /* =====================================================
+       STUDENT PERFORMANCE CHART
+       ===================================================== */
+    const marksCanvas =
+        document.getElementById("marksChart");
+    if (marksCanvas && students.length > 0) {
+        const studentNames =
+            students.map(function(student) {
+                return student.name;
+            });
+        const studentMarks =
+            students.map(function(student) {
+                return student.marks;
+            });
+        new Chart(marksCanvas, {
+            type: "bar",
+            data: {
+                labels: studentNames,
+                datasets: [
+                    {
+                        label: "Student Marks",
+                        data: studentMarks,
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            color: "#ffffff"
+                        },
+                        title: {
+                            display: true,
+                            text: "Students",
+                            color: "#ffffff"
+                        },
+                        grid: {
+                            color:
+                                "rgba(148, 163, 184, 0.15)"
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: "#ffffff"
+                        },
+                        title: {
+                            display: true,
+                            text: "Marks",
+                            color: "#ffffff"
+                        },
+                        grid: {
+                            color:
+                                "rgba(148, 163, 184, 0.15)"
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: "#ffffff",
+                            font: {
+                                size: 14,
+                                weight: "600"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /* =====================================================
+       STUDENTS BY COURSE CHART
+       ===================================================== */
+    const courseCanvas =
+        document.getElementById("courseChart");
+    if (
+        courseCanvas &&
+        courseCounts &&
+        Object.keys(courseCounts).length > 0
+    ) {
+        const courseNames =
+            Object.keys(courseCounts);
+        const courseValues =
+            Object.values(courseCounts);
+        new Chart(courseCanvas, {
+            type: "pie",
+            data: {
+                labels: courseNames,
+                datasets: [
+                    {
+                        label: "Students",
+                        data: courseValues,
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "right",
+                        labels: {
+                            color: "#ffffff",
+                            font: {
+                                size: 14,
+                                weight: "600"
+                            },
+                            padding: 15
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

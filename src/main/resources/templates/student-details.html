@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+
+    <style>
+        :root {
+            --bg: #071321;
+            --panel: rgba(15, 23, 42, 0.82);
+            --line: rgba(148, 163, 184, 0.2);
+            --text: #e2e8f0;
+            --muted: #cbd5e1;
+            --primary: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #020817, #0f172a 52%, #111827 100%);
+            color: var(--text);
+            padding: 28px 18px;
+        }
+
+        .container {
+            width: min(100%, 720px);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 24px 60px rgba(2, 8, 23, .7);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+        }
+
+        .badge {
+            display: inline-block;
+            margin-bottom: 18px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, .15);
+            border: 1px solid rgba(34, 197, 94, .3);
+            color: #bbf7d0;
+            font-weight: bold;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .info-card {
+            background: rgba(148, 163, 184, .05);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .label {
+            color: var(--muted);
+            font-size: .8rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .value {
+            margin-top: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            transition: .3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: .95;
+        }
+
+        .secondary {
+            background: rgba(59, 130, 246, .15);
+            border: 1px solid rgba(59, 130, 246, .3);
+        }
+
+        @media(max-width:600px) {
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="badge"
+         th:text="${performanceStatus != null ? performanceStatus : 'N/A'}">
+        Excellent
+    </div>
+
+    <h1 th:text="${student != null ? student.name : 'Student Name'}">
+        Student Name
+    </h1>
+
+    <div class="info-card">
+        <div class="label">Student Photo</div>
+
+        <div th:if="${student.imageName != null and !student.imageName.isEmpty()}">
+            <img th:src="@{'/uploads/' + ${student.imageName}}"
+                 alt="Student Photo"
+                 style="width:150px;
+                        height:150px;
+                        object-fit:cover;
+                        border-radius:15px;
+                        margin-top:10px;">
+        </div>
+
+        <div th:if="${student.imageName == null or student.imageName.isEmpty()}">
+            <span>No Photo</span>
+        </div>
+    </div>
+
+
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <div class="label">Course</div>
+            <div class="value"
+                 th:text="${student != null ? student.course : 'N/A'}">
+                Course
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="label">Marks</div>
+            <div class="value"
+                 th:text="${student != null ? student.marks : 0}">
+                0
+            </div>
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <a class="btn"
+           th:href="@{/students/edit/{id}(id=${student.id})}">
+            Edit
+        </a>
+
+        <a class="btn secondary"
+           th:href="@{/students}">
+            Back to List
+        </a>
+
+    </div>
+
+</div>
+</body>
+</html>
